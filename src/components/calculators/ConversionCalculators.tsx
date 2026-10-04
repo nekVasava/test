@@ -15,8 +15,10 @@ import {
   convertTemperature,
   calculateFuelCost,
   calculateDataTransferTime,
+  convertDataSize,
   convertNumberBase,
   UNIT_CONVERSIONS,
+  DataSizeUnit,
   UnitCategory,
 } from '../../services/calculations';
 import { generateShareUrl } from '../../utils/urlSharing';
@@ -482,10 +484,13 @@ export const DataTransferCalculatorView: React.FC<CommonProps> = ({
   onShowToast,
 }) => {
   const [fileSize, setFileSize] = useState<string>(initialInputs?.size || '50');
-  const [fileUnit, setFileUnit] = useState<'MB' | 'GB' | 'TB'>('GB');
+  const [fileUnit, setFileUnit] = useState<DataSizeUnit>((initialInputs?.fileUnit as DataSizeUnit) || 'GB');
+  const [toUnit, setToUnit] = useState<DataSizeUnit>((initialInputs?.toUnit as DataSizeUnit) || 'MB');
   const [speed, setSpeed] = useState<string>(initialInputs?.speed || '100');
 
   const res = calculateDataTransferTime(Number(fileSize), fileUnit, Number(speed));
+  const convertedSize = convertDataSize(Number(fileSize), fileUnit, toUnit);
+  const dataSizeUnits: DataSizeUnit[] = ['B', 'KB', 'MB', 'GB', 'TB'];
 
   useEffect(() => {
     if (res.isValid && res.data) {
@@ -494,7 +499,7 @@ export const DataTransferCalculatorView: React.FC<CommonProps> = ({
   }, [res.data?.totalSeconds]);
 
   const handleShare = () => {
-    const url = generateShareUrl('datatransfer', { size: fileSize, speed });
+    const url = generateShareUrl('datatransfer', { size: fileSize, fileUnit, toUnit, speed });
     navigator.clipboard.writeText(url);
     onShowToast({ type: 'success', message: 'Data transfer link copied!' });
   };
@@ -504,8 +509,8 @@ export const DataTransferCalculatorView: React.FC<CommonProps> = ({
     onSaveHistory(
       'datatransfer',
       'Data Transfer & Speed',
-      { fileSize, fileUnit, speed },
-      `${fileSize} ${fileUnit} at ${speed} Mbps -> Time: ${res.data.formattedTime}`
+      { fileSize, fileUnit, toUnit, speed },
+      `${fileSize} ${fileUnit} = ${convertedSize.data?.result} ${toUnit}; at ${speed} Mbps -> ${res.data.formattedTime}`
     );
   };
 
@@ -531,9 +536,9 @@ export const DataTransferCalculatorView: React.FC<CommonProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">File / Payload Size</label>
+            <label className="block text-xs font-semibold text-slate-300 mb-1.5">File Size (From)</label>
             <div className="flex gap-2">
               <input
                 type="number"
@@ -543,14 +548,23 @@ export const DataTransferCalculatorView: React.FC<CommonProps> = ({
               />
               <select
                 value={fileUnit}
-                onChange={(e) => setFileUnit(e.target.value as 'MB' | 'GB' | 'TB')}
+                onChange={(e) => setFileUnit(e.target.value as DataSizeUnit)}
                 className="w-24 px-2 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs font-bold text-white"
               >
-                <option value="MB">MB</option>
-                <option value="GB">GB</option>
-                <option value="TB">TB</option>
+                {dataSizeUnits.map((unit) => <option key={unit} value={unit}>{unit}</option>)}
               </select>
             </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-slate-300 mb-1.5">Convert To</label>
+            <select
+              value={toUnit}
+              onChange={(e) => setToUnit(e.target.value as DataSizeUnit)}
+              className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-sm font-medium text-white"
+            >
+              {dataSizeUnits.map((unit) => <option key={unit} value={unit}>{unit}</option>)}
+            </select>
           </div>
 
           <div>
@@ -590,11 +604,11 @@ export const DataTransferCalculatorView: React.FC<CommonProps> = ({
           </div>
 
           <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800">
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">File Volume</span>
+            <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Converted File Size</span>
             <div className="text-2xl font-extrabold text-amber-400 mt-1">
-              {fileSize} {fileUnit}
+              {convertedSize.isValid && convertedSize.data ? `${convertedSize.data.result} ${toUnit}` : '--'}
             </div>
-            <p className="text-xs text-slate-500 mt-1">At {speed} megabits/sec line speed</p>
+            <p className="text-xs text-slate-500 mt-1">{fileSize} {fileUnit} at {speed} Mbps</p>
           </div>
         </div>
       )}

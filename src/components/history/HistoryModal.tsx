@@ -187,7 +187,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
               <History className="w-10 h-10 mx-auto text-slate-600 stroke-[1.5]" />
               <p className="text-sm font-medium text-slate-400">No calculation history found</p>
               <p className="text-xs text-slate-500 max-w-xs mx-auto">
-                Completed calculations will automatically appear here for one-tap restore and export.
+                Tap a calculator's bookmark icon to save its result here for one-tap restore and export.
               </p>
             </div>
           ) : (

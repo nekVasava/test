@@ -1132,7 +1132,7 @@ export function calculateFuelCost(
 // -------------------------------------------------------------
 export function calculateDataTransferTime(
   fileSize: number,
-  fileUnit: 'MB' | 'GB' | 'TB',
+  fileUnit: DataSizeUnit,
   networkSpeedMbps: number
 ) {
   const sizeCheck = validateFiniteNumber(fileSize, { label: 'File Size', min: 0.01 });
@@ -1143,6 +1143,8 @@ export function calculateDataTransferTime(
 
   // Convert file size to megabits (1 Byte = 8 bits)
   const multipliers: Record<string, number> = {
+    B: 8 / (1024 * 1024),
+    KB: 8 / 1024,
     MB: 8,
     GB: 8 * 1024,
     TB: 8 * 1024 * 1024,
@@ -1162,6 +1164,31 @@ export function calculateDataTransferTime(
       formattedTime: `${hours > 0 ? `${hours}h ` : ''}${minutes}m ${seconds}s`,
       transferRateMBps: Number((speedCheck.value / 8).toFixed(2)),
     },
+  };
+}
+
+export type DataSizeUnit = 'B' | 'KB' | 'MB' | 'GB' | 'TB';
+
+export function convertDataSize(value: number, fromUnit: DataSizeUnit, toUnit: DataSizeUnit) {
+  const valueCheck = validateFiniteNumber(value, {
+    label: 'File Size',
+    min: 0,
+    allowZero: true,
+  });
+  if (!valueCheck.isValid) return { isValid: false, error: valueCheck.error };
+
+  const bytesPerUnit: Record<DataSizeUnit, number> = {
+    B: 1,
+    KB: 1024,
+    MB: 1024 ** 2,
+    GB: 1024 ** 3,
+    TB: 1024 ** 4,
+  };
+  const result = (valueCheck.value * bytesPerUnit[fromUnit]) / bytesPerUnit[toUnit];
+
+  return {
+    isValid: true,
+    data: { result: Number(result.toPrecision(8)), fromUnit, toUnit },
   };
 }
 

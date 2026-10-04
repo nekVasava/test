@@ -19,6 +19,7 @@ import {
   convertTemperature,
   calculateFuelCost,
   calculateDataTransferTime,
+  convertDataSize,
   convertNumberBase,
 } from './calculations';
 import {
@@ -561,8 +562,9 @@ export async function runAllRegressionTests(): Promise<TestResult[]> {
   // Calc 19: Data Transfer
   runTest('calc-19-data', 'Calc 19: Data Transfer & Speed', 'Calculator', 'Download 10 GB at 100 Mbps', () => {
     const res = calculateDataTransferTime(10, 'GB', 100);
-    const passed = res.isValid && (res.data?.totalSeconds || 0) > 800;
-    return { passed, actual: `Transfer time: ${res.data?.formattedTime}` };
+    const converted = convertDataSize(1, 'GB', 'MB');
+    const passed = res.isValid && (res.data?.totalSeconds || 0) > 800 && converted.isValid && converted.data?.result === 1024;
+    return { passed, actual: `Transfer time: ${res.data?.formattedTime}; 1 GB = ${converted.data?.result} MB` };
   });
 
   // Calc 20: Number Base
