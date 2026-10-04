@@ -75,11 +75,12 @@ export const BmiCalculatorView: React.FC<CommonProps> = ({
             <h2 className="text-base font-bold text-white">Body Mass Index (BMI)</h2>
           </div>
           <div className="flex items-center gap-1.5">
-            <button onClick={handleShare} className="p-1.5 rounded-lg text-slate-400 hover:text-white transition">
+            <button onClick={handleShare} aria-label="Share calculation link" className="p-1.5 rounded-lg text-slate-400 hover:text-white transition">
               <Share2 className="w-4 h-4" />
             </button>
             <button
               onClick={handleSave}
+              aria-label="Save calculation to history"
               disabled={!res.isValid}
               className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-400 transition disabled:opacity-40"
             >
@@ -246,11 +247,12 @@ export const BmrCalculatorView: React.FC<CommonProps> = ({
             <h2 className="text-base font-bold text-white">Basal Metabolic Rate & TDEE</h2>
           </div>
           <div className="flex items-center gap-1.5">
-            <button onClick={handleShare} className="p-1.5 rounded-lg text-slate-400 hover:text-white transition">
+            <button onClick={handleShare} aria-label="Share calculation link" className="p-1.5 rounded-lg text-slate-400 hover:text-white transition">
               <Share2 className="w-4 h-4" />
             </button>
             <button
               onClick={handleSave}
+              aria-label="Save calculation to history"
               disabled={!res.isValid}
               className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-400 transition disabled:opacity-40"
             >
@@ -405,11 +407,12 @@ export const BodyFatCalculatorView: React.FC<CommonProps> = ({
             <h2 className="text-base font-bold text-white">Body Fat (US Navy Circumference)</h2>
           </div>
           <div className="flex items-center gap-1.5">
-            <button onClick={handleShare} className="p-1.5 rounded-lg text-slate-400 hover:text-white transition">
+            <button onClick={handleShare} aria-label="Share calculation link" className="p-1.5 rounded-lg text-slate-400 hover:text-white transition">
               <Share2 className="w-4 h-4" />
             </button>
             <button
               onClick={handleSave}
+              aria-label="Save calculation to history"
               disabled={!res.isValid}
               className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-400 transition disabled:opacity-40"
             >
@@ -546,11 +549,12 @@ export const WaterCalculatorView: React.FC<CommonProps> = ({
             <h2 className="text-base font-bold text-white">Daily Hydration Target</h2>
           </div>
           <div className="flex items-center gap-1.5">
-            <button onClick={handleShare} className="p-1.5 rounded-lg text-slate-400 hover:text-white transition">
+            <button onClick={handleShare} aria-label="Share calculation link" className="p-1.5 rounded-lg text-slate-400 hover:text-white transition">
               <Share2 className="w-4 h-4" />
             </button>
             <button
               onClick={handleSave}
+              aria-label="Save calculation to history"
               disabled={!res.isValid}
               className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-400 transition disabled:opacity-40"
             >

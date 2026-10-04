@@ -1,6 +1,5 @@
 {
   "name": "CalcNest - Android & Offline Calculator Suite",
   "description": "Fast, dependable, offline-first PWA calculator suite with 20 financial, health, everyday, and engineering tools with strict validation and complete test suite.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "requestFramePermissions": []
 }

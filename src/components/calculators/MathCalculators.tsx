@@ -81,11 +81,12 @@ export const AgeCalculatorView: React.FC<CommonProps> = ({
             <h2 className="text-base font-bold text-white">Age & Life Chronology</h2>
           </div>
           <div className="flex items-center gap-1.5">
-            <button onClick={handleShare} className="p-1.5 rounded-lg text-slate-400 hover:text-white transition">
+            <button onClick={handleShare} aria-label="Share calculation link" className="p-1.5 rounded-lg text-slate-400 hover:text-white transition">
               <Share2 className="w-4 h-4" />
             </button>
             <button
               onClick={handleSave}
+              aria-label="Save calculation to history"
               disabled={!res.isValid}
               className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-400 transition disabled:opacity-40"
             >
@@ -208,11 +209,12 @@ export const PercentageCalculatorView: React.FC<CommonProps> = ({
             <h2 className="text-base font-bold text-white">Percentage Calculations</h2>
           </div>
           <div className="flex items-center gap-1.5">
-            <button onClick={handleShare} className="p-1.5 rounded-lg text-slate-400 hover:text-white transition">
+            <button onClick={handleShare} aria-label="Share calculation link" className="p-1.5 rounded-lg text-slate-400 hover:text-white transition">
               <Share2 className="w-4 h-4" />
             </button>
             <button
               onClick={handleSave}
+              aria-label="Save calculation to history"
               disabled={!res.isValid}
               className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-400 transition disabled:opacity-40"
             >
@@ -401,7 +403,8 @@ export const ScientificCalculatorView: React.FC<CommonProps> = ({
                   else if (btn === 'DEL') handleBackspace();
                   else appendToken(btn);
                 }}
-                className={`h-11 sm:h-12 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center justify-center ${bg}`}
+                aria-label={btn === 'DEL' ? 'Delete last character' : undefined}
+                className={`h-11 sm:h-12 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${bg}`}
               >
                 {btn === 'DEL' ? <Delete className="w-4 h-4" /> : btn}
               </button>
@@ -460,11 +463,12 @@ export const TimeCalculatorView: React.FC<CommonProps> = ({
             <h2 className="text-base font-bold text-white">Work Shift & Duration</h2>
           </div>
           <div className="flex items-center gap-1.5">
-            <button onClick={handleShare} className="p-1.5 rounded-lg text-slate-400 hover:text-white transition">
+            <button onClick={handleShare} aria-label="Share calculation link" className="p-1.5 rounded-lg text-slate-400 hover:text-white transition">
               <Share2 className="w-4 h-4" />
             </button>
             <button
               onClick={handleSave}
+              aria-label="Save calculation to history"
               disabled={!res.isValid}
               className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-400 transition disabled:opacity-40"
             >
@@ -628,6 +632,7 @@ export const GpaCalculatorView: React.FC<CommonProps> = ({
             </button>
             <button
               onClick={handleSave}
+              aria-label="Save calculation to history"
               disabled={!res.isValid}
               className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-400 transition disabled:opacity-40"
             >

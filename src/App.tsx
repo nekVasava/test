@@ -385,6 +385,11 @@ export default function App() {
               <p className="text-xs text-slate-400 mt-0.5">
                 {selectedCalcMeta.description}
               </p>
+              {selectedCalcMeta.category === 'financial' && (
+                <p role="note" className="text-[11px] text-amber-300/80 mt-1">
+                  Estimates are informational only and are not financial, tax, or legal advice.
+                </p>
+              )}
             </div>
           </div>
 
@@ -411,6 +416,8 @@ export default function App() {
           <div className="flex items-center gap-2">
             <span className="font-bold text-slate-400">CalcNest PWA</span>
             <span>·</span>
+            <span>1.0.0-rc.2</span>
+            <span>·</span>
             <span>Offline-First Progressive Web Application</span>
           </div>
           <div className="flex items-center gap-4 text-[11px]">
@@ -420,10 +427,21 @@ export default function App() {
               onClick={() => setIsTestRunnerOpen(true)}
               className="hover:text-emerald-400 transition"
             >
-              Run Regression Suite (12 Tests)
+              Run Test Suite (41 Tests)
             </button>
             <span>·</span>
-            <span>Android & iOS Ready</span>
+            <a href={`${import.meta.env.BASE_URL}privacy.html`} className="hover:text-emerald-400 transition">
+              Privacy
+            </a>
+            <span>·</span>
+            <a
+              href="https://github.com/nekVasava/test/issues"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-emerald-400 transition"
+            >
+              Support
+            </a>
           </div>
         </div>
       </footer>

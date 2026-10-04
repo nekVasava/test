@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { History, Download, Trash2, X, RotateCcw, Search, Sparkles, AlertCircle } from 'lucide-react';
 import { HistoryEntry } from '../../types';
 import { clearHistory, deleteHistoryEntry, FREE_TIER_HISTORY_LIMIT } from '../../utils/storage';
 import { buildCsv, downloadCsv } from '../../utils/csv';
+import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
 
 interface HistoryModalProps {
   isOpen: boolean;
@@ -25,6 +26,8 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [confirmClear, setConfirmClear] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogAccessibility(dialogRef, isOpen, onClose);
 
   if (!isOpen) return null;
 
@@ -90,6 +93,8 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="history-modal-title"
+      tabIndex={-1}
+      ref={dialogRef}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in"
     >
       <div className="w-full max-w-xl max-h-[85vh] flex flex-col rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl text-slate-100 overflow-hidden">
@@ -194,13 +199,17 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
             filteredHistory.map((item) => (
               <div
                 key={item.id}
-                onClick={() => {
-                  onSelectEntry(item);
-                  onClose();
-                }}
-                className="pt-2.5 first:pt-0 group flex items-start justify-between gap-3 p-3 rounded-xl hover:bg-slate-800/70 cursor-pointer transition border border-transparent hover:border-slate-700"
+                className="pt-2.5 first:pt-0 group flex items-start justify-between gap-3 p-3 rounded-xl transition border border-transparent hover:border-slate-700"
               >
-                <div className="space-y-1 min-w-0">
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSelectEntry(item);
+                    onClose();
+                  }}
+                  aria-label={`Restore ${item.calculatorName}: ${item.summary}`}
+                  className="space-y-1 min-w-0 text-left rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+                >
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-xs text-emerald-400">
                       {item.calculatorName}
@@ -220,11 +229,12 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
                   <div className="text-xs font-medium text-slate-200 line-clamp-2">
                     {item.summary}
                   </div>
-                </div>
+                </button>
 
                 <div className="flex items-center gap-1.5 shrink-0 opacity-80 group-hover:opacity-100">
                   <span
                     title="Load into calculator"
+                    aria-hidden="true"
                     className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
@@ -246,7 +256,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
         <div className="p-3 bg-slate-950/80 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-1.5">
             <AlertCircle className="w-3.5 h-3.5 text-slate-500" />
-            <span>Tap any entry to reload its values into the calculator.</span>
+            <span>Select a saved entry to restore its calculator inputs.</span>
           </div>
           <span className="text-slate-500">Safe offline storage</span>
         </div>

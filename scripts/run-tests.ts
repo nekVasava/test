@@ -1,8 +1,9 @@
 import { runAllRegressionTests } from '../src/services/regressionTests';
+import { runAccessibilityTests } from './accessibility-tests';
 
 async function main() {
   console.log('🚀 Running CalcNest Automated Regression & Unit Test Suite...\n');
-  const results = await runAllRegressionTests();
+  const results = [...await runAllRegressionTests(), ...runAccessibilityTests()];
   
   let passedCount = 0;
   let failedCount = 0;
@@ -30,7 +31,7 @@ async function main() {
   if (failedCount > 0) {
     process.exit(1);
   } else {
-    console.log('\n🎉 ALL 34 AUTOMATED TESTS PASSED SUCCESSFULLY!');
+    console.log(`\n🎉 ALL ${results.length} AUTOMATED TESTS PASSED SUCCESSFULLY!`);
     process.exit(0);
   }
 }

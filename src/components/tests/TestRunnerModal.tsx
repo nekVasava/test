@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { CheckCircle2, XCircle, Play, RotateCcw, X, ShieldCheck, Clock, Check } from 'lucide-react';
 import { TestResult } from '../../types';
 import { runAllRegressionTests } from '../../services/regressionTests';
+import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
 
 interface TestRunnerModalProps {
   isOpen: boolean;
@@ -12,6 +13,8 @@ export const TestRunnerModal: React.FC<TestRunnerModalProps> = ({ isOpen, onClos
   const [results, setResults] = useState<TestResult[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [filter, setFilter] = useState<'all' | 'Regression' | 'Calculator'>('all');
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogAccessibility(dialogRef, isOpen, onClose);
 
   const executeTests = async () => {
     setIsRunning(true);
@@ -47,6 +50,8 @@ export const TestRunnerModal: React.FC<TestRunnerModalProps> = ({ isOpen, onClos
       role="dialog"
       aria-modal="true"
       aria-labelledby="test-runner-title"
+      tabIndex={-1}
+      ref={dialogRef}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in"
     >
       <div className="w-full max-w-2xl max-h-[85vh] flex flex-col rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl text-slate-100 overflow-hidden">
@@ -61,7 +66,7 @@ export const TestRunnerModal: React.FC<TestRunnerModalProps> = ({ isOpen, onClos
                 Automated Regression & Test Suite
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
-                Verifies Section 7 minimum regression cases & all 20 calculators
+                Verifies calculator behavior and accessibility interaction regressions
               </p>
             </div>
           </div>
@@ -196,7 +201,7 @@ export const TestRunnerModal: React.FC<TestRunnerModalProps> = ({ isOpen, onClos
           <span>
             Passing: {passedCount}/{totalCount} ({Math.round((passedCount / (totalCount || 1)) * 100)}%)
           </span>
-          <span className="text-emerald-400 font-medium">100% Release Ready</span>
+          <span className="text-emerald-400 font-medium">Automated checks only</span>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Download, Share2, PlusSquare, X } from 'lucide-react';
 import { usePWAInstall } from '../../hooks/usePWAInstall';
+import { useDialogAccessibility } from '../../hooks/useDialogAccessibility';
 
 interface PWAInstallButtonProps {
   variant?: 'header' | 'compact' | 'drawer';
@@ -9,6 +10,8 @@ interface PWAInstallButtonProps {
 export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ variant = 'header' }) => {
   const { isInstallable, isInstalled, isIOS, install } = usePWAInstall();
   const [showIOSGuide, setShowIOSGuide] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogAccessibility(dialogRef, showIOSGuide, () => setShowIOSGuide(false));
 
   // If already installed in standalone mode, hide
   if (isInstalled) {
@@ -51,6 +54,8 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ variant = 'h
             role="dialog"
             aria-modal="true"
             aria-labelledby="ios-guide-title"
+            tabIndex={-1}
+            ref={dialogRef}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-in fade-in"
           >
             <div className="w-full max-w-sm rounded-2xl bg-slate-900 border border-slate-700 p-6 shadow-2xl text-slate-100">
@@ -62,7 +67,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ variant = 'h
                 <button
                   onClick={() => setShowIOSGuide(false)}
                   aria-label="Close"
-                  className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+                  className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition focus-visible:ring-2 focus-visible:ring-emerald-400"
                 >
                   <X className="w-5 h-5" />
                 </button>

@@ -119,7 +119,7 @@ export const Header: React.FC<HeaderProps> = ({
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span className="hidden lg:inline">Tests</span>
             <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/70 border border-emerald-500/30 px-1 rounded">
-              34
+              41
             </span>
           </button>
 
